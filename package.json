@@ -1,0 +1,28 @@
+{
+  "name": "colour_lab",
+  "version": "0.0.1",
+  "description": "A toolbox for helpful operations performed on colour values",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamMalcolm/colour-lab.git"
+  },
+  "keywords": [
+    "node",
+    "javascript",
+    "colour",
+    "color",
+    "hex",
+    "rgb",
+    "design"
+  ],
+  "author": "Sam Malcolm <sam.malcolm.media@gmail.com> (https://sammalcolmmedia.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SamMalcolm/colour-lab/issues"
+  },
+  "homepage": "https://github.com/SamMalcolm/colour-lab#readme"
+}

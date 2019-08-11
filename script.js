@@ -28,15 +28,33 @@ colour_lab.convertToRgb = (hex) => {
 colour_lab.convertToHex = (rgb) => {
     return "#" + parseInt(rgb[0]).toString(16) + parseInt(rgb[1]).toString(16) + parseInt(rgb[2]).toString(16);
 }
-
-colour_lab.calculateSteps = (colour1, colour2, steps) => {
+colour_lab.prepColourValues = (colour1, colour2) => {
     if (typeof colour1 == "string") {
         colour1 = colour_lab.convertToRgb(colour1);
     }
     if (typeof colour2 == "string") {
         colour2 = colour_lab.convertToRgb(colour2);
     }
+    return [colour1, colour2];
+}
+
+colour_lab.validateRgb = rgb => {
+    if (rgb[0] > 255) {
+        throw new Error("Cannot have RGB Value greated than 255 (RED)")
+    }
+    if (rgb[1] > 255) {
+        throw new Error("Cannot have RGB Value greated than 255 (GREEN)")
+    }
+    if (rgb[2] > 255) {
+        throw new Error("Cannot have RGB Value greated than 255 (BLUE)")
+    }
+}
+
+colour_lab.calculateSteps = (colour1, colour2, steps) => {
+    [colour1, colour2] = colour_lab.prepColourValues(colour1, colour2);
     let redStep, greenStep, blueStep;
+    colour_lab.validateRgb(colour1);
+    colour_lab.validateRgb(colour2);
     redStep = (colour2[0] - colour1[0]) / steps;
     greenStep = (colour2[1] - colour1[1]) / steps;
     blueStep = (colour2[2] - colour1[2]) / steps;
@@ -86,3 +104,14 @@ colour_lab.generateHTML = (steps) => {
         }
     })
 }
+
+colour_lab.average_colour = (colour1, colour2) => {
+    [colour1, colour2] = colour_lab.prepColourValues(colour1, colour2);
+    colour_lab.validateRgb(colour1);
+    colour_lab.validateRgb(colour2);
+    return [(colour1[0] + colour2[0])/2, (colour1[1] + colour2[1])/2, (colour1[2] + colour2[2])/2];
+}
+
+console.log(colour_lab.convertToHex(colour_lab.average_colour("#000",[255,255,255])));
+
+exports.default = colour_lab;
