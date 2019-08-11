@@ -68,7 +68,7 @@ colour_lab.calculateSteps = (colour1, colour2, steps) => {
 colour_lab.generateHTML = (steps) => {
     for (let i = 0; i < steps.length; i++) {
         markup += `
-        <div class="colour" style="background-color:rgb(${steps[i][0]},${steps[i][1]},${steps[i][2]})">
+        <div class="colour" style="background-color:rgb(${colours[i][0]},${colours[i][1]},${colours[i][2]})">
         </div>
         `;
     }
@@ -112,6 +112,35 @@ colour_lab.average_colour = (colour1, colour2) => {
     return [(colour1[0] + colour2[0])/2, (colour1[1] + colour2[1])/2, (colour1[2] + colour2[2])/2];
 }
 
-console.log(colour_lab.convertToHex(colour_lab.average_colour("#000",[255,255,255])));
+colour_lab.generateCSSGradientRules = (colours, direction="top") => {
+    for (let i = 0; i < colours.length; i++) {
+        if (typeof colours[i] == "string") {
+            colours[i] = colour_lab.convertToRgb(colours[i]);
+        }
+    }
+    let rgbSteps = "";
+    for (let i = 1; i < colours.length; i++) {
+        rgbSteps += `rgb(${colours[i][0]},${colours[i][1]},${colours[i][2]}) ${i/colours.length * 100}%,`
+    }
+    let cssString = `
+        background: rgb(${colours[0][0]},${colours[0][1]},${colours[0][2]});
+        background: -moz-linear-gradient(${direction},  
+            rgb(${colours[0][0]},${colours[0][1]},${colours[0][2]}) 0%,
+            ${rgbSteps}
+            rgb(${colours[colours.length - 1][0]},${colours[colours.length - 1][1]},${colours[colours.length - 1][2]}) 100%); 
+        background: -webkit-linear-gradient(${direction},  
+            rgb(${colours[0][0]},${colours[0][1]},${colours[0][2]}) 0%,
+            ${rgbSteps}
+            rgb(${colours[colours.length - 1][0]},${colours[colours.length - 1][1]},${colours[colours.length - 1][2]}) 100%); 
+        background: linear-gradient(${(direction == "top") ? "to bottom" : "to bottom"},  
+            rgb(${colours[0][0]},${colours[0][1]},${colours[0][2]}) 0%,
+            ${rgbSteps}
+            rgb(${colours[colours.length - 1][0]},${colours[colours.length - 1][1]},${colours[colours.length - 1][2]}) 100%); 
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='${colour_lab.convertToHex(colours[0])}', endColorstr='${colour_lab.convertToHex(colours[colours.length - 1])}',GradientType=0 ); 
+    `;
+    return cssString;
+}
+
+console.log(colour_lab.generateCSSGradientRules([[255,0,0], [255,192,63],"#FFFF00", [0,255,0], [0,0,255],[170,0,150]]));
 
 exports.default = colour_lab;
